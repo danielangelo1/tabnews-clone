@@ -1,16 +1,22 @@
-import type { JestConfigWithTsJest } from "ts-jest";
+import { Config } from "jest";
+import nextJest from "next/jest";
+import dotenv from "dotenv";
 
-const config: JestConfigWithTsJest = {
-  collectCoverage: false,
-  coverageDirectory: "coverage",
-  coverageProvider: "v8",
-  preset: "ts-jest/presets/default-esm",
-  testPathIgnorePatterns: ["/node_modules/"],
-  transform: {},
+dotenv.config({
+  path: ".env.development",
+});
+
+const createJestConfig = nextJest({
+  dir: "./",
+});
+
+const jestConfig: Config = {
+  moduleFileExtensions: ["js", "jsx", "ts", "tsx"],
+  moduleDirectories: ["node_modules", "<rootDir>"],
+  // setupFiles: ["<rootDir>/src/tests/jest-setup-tests.ts"],
   moduleNameMapper: {
-    "^(\\.{1,2}/.*)\\.js$": "$1",
+    "^@/(.*)$": "<rootDir>/src/$1",
   },
-  testEnvironment: "node",
 };
 
-export default config;
+export default createJestConfig(jestConfig);
